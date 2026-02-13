@@ -226,7 +226,7 @@ static fs::path scanExeDirForMainScript(
     {
         std::string msg =
             "Multiple main scripts were found in the EXE directory (recursive scan).\n\n"
-            "Only one main script is allowed.\n\n"
+            "Please disambiguate via command line argument or drag-and-dropping onto EXE.\n\n"
             "Qualifying scripts:\n" + formatPathList(scanned) +
             "\nTip: The first line of the main script must be '-- MAINSCRIPT'.\n"
             "Note: Dot-hidden files/directories (name starts with '.') are skipped.";
