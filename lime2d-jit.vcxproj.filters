@@ -101,9 +101,6 @@
     <ClInclude Include="src\keyboard.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\license.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\LuaHost.h">
       <Filter>Source Files</Filter>
     </ClInclude>

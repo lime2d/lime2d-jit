@@ -1,6 +1,5 @@
 #include "App.h"
 #include "gl.h"
-#include "license.h"
 #include "LuaHost.h"
 #include "ScreenInfo.h"
 #include "ScreenLua.h"
@@ -47,9 +46,6 @@ void ScreenLua::showSystemInfoScreen()
         else
             oss << "    ";
     }
-
-    oss << License::LUAJIT;
-    oss << License::MINIZ;
 
     info_screen.setKind(ScreenInfo::Kind::Info);
     info_screen.setTitle("--  S Y S T E M   I N F O  --");

@@ -166,7 +166,6 @@
     <ClInclude Include="src\IBM_VGA8.h" />
     <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\keyboard.h" />
-    <ClInclude Include="src\license.h" />
     <ClInclude Include="src\LuaHost.h" />
     <ClInclude Include="src\misc.h" />
     <ClInclude Include="src\MonospaceMonochromePixelFont.h" />
