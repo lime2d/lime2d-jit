@@ -5,6 +5,7 @@
 *   b) Release: @set LJCOMPILE=cl /nologo /c /O2 /W3 /D_CRT_SECURE_NO_DEPRECATE /D_CRT_STDIO_INLINE=__inline
 * Note: - Save the vc140.pdb files and keep them with respective libs
 *       - The luajit.h header gets created during lib build
+*       - Pre-built lua51.lib files already exist in the luajit\lib folder; update them only as needed
 * 
 * 2. File Dependencies (these must be physically present in the project folder)
 * lime2d-jit\
@@ -44,6 +45,10 @@
 *   -> System
 *     -> SubSystem
 *        > Windows (/SUBSYSTEM:WINDOWS) <- Only for Release Configuration
+* Build Events
+*   -> Post-Build Events
+*     -> Command Line
+*        > xcopy /E /I /Y /Q "$(ProjectDir)src\examples\*" "$(TargetDir)examples\"
 */
 
 #include "App.h"
