@@ -1,0 +1,20 @@
+# --- User Specific Exclusions ---
+.prompts
+.prev_src
+.vs
+lime2d-jit
+x64
+.compare.WinMerge
+
+# --- General Dotfile Rule ---
+# This ignores every file/folder starting with a period
+.*
+
+# --- Exceptions to the Dotfile Rule ---
+# We MUST track the gitignore itself
+!.gitignore
+# Optional: track github workflows if you use them later
+!.github/
+
+# --- Visual Studio Specifics ---
+*.vcxproj.user
