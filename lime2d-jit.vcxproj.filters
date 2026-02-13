@@ -13,14 +13,14 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\demo">
-      <UniqueIdentifier>{c56f7c3f-21f3-4ece-b2b2-6e704d5fe2cb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="glad">
       <UniqueIdentifier>{fa0f9d84-aa43-4f02-83d0-1f4c677bf4a4}</UniqueIdentifier>
     </Filter>
     <Filter Include="miniz">
       <UniqueIdentifier>{fc9afc1d-b10d-4cea-94d0-efdd72db6b0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\examples">
+      <UniqueIdentifier>{f1de5114-afe0-4057-87d0-1c2f2ca3c490}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -133,8 +133,8 @@
     <None Include="src\Lime2D Reference Manual.md">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="src\demo\pong.lua">
-      <Filter>Source Files\demo</Filter>
+    <None Include="src\examples\pong.lua">
+      <Filter>Source Files\examples</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -113,7 +113,7 @@
       <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /E /I /Y /Q "$(ProjectDir)src\demo\*" "$(TargetDir)demo\"</Command>
+      <Command>xcopy /E /I /Y /Q "$(ProjectDir)src\examples\*" "$(TargetDir)examples\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -135,7 +135,7 @@
       <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /E /I /Y /Q "$(ProjectDir)src\demo\*" "$(TargetDir)demo\"</Command>
+      <Command>xcopy /E /I /Y /Q "$(ProjectDir)src\examples\*" "$(TargetDir)examples\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -177,7 +177,7 @@
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\demo\pong.lua" />
+    <None Include="src\examples\pong.lua" />
     <None Include="src\Lime2D Reference Manual.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
