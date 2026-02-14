@@ -61,4 +61,4 @@ These hotkeys are reserved by the engine and cannot be overridden by scripts.
 
 ## License
 
-Lime2D is released under the MIT License. See [LICENSE.txt](LICENSE.txt) for details.
+Lime2D is released under the MIT License. See [LICENSE](LICENSE) for details.
