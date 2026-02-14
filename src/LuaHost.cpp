@@ -989,7 +989,21 @@ int LuaHost::l_graphics_image(lua_State* L)
     if (it == self->images.end())
         return luaL_error(L, "Unknown image '%s' (did you call lime.graphics.defineImage?)", name);
 
-    requireScreen(L)->image(&it->second->img, row, col, draw_bg, dy);
+    MonospaceMonochromePixelFont& font = *Screen::font;
+    int x = col * font.glyph_width;
+    int y = row * font.glyph_height + Screen::text_offset_y + dy;
+
+    if (x % 8)
+        return luaL_error(L, "lime.graphics.image: image x not a multiple of 8 (%d)", x);
+
+    Image* img = &it->second->img;
+    int w = img->width;
+    int h = img->height;
+
+    if (x < 0 || y < 0 || x + w > Screen::width || y + h > Screen::height)
+        return luaL_error(L, "lime.graphics.image: out of bounds (%d,%d)-(%d,%d)", x, y, x + w - 1, y + h - 1);
+
+    requireScreen(L)->image(img, row, col, draw_bg, dy);
     return 0;
 }
 

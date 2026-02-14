@@ -778,17 +778,19 @@ void Screen::image(Image* image, int row, int col, bool draw_bg, int dy)
 {
     MonospaceMonochromePixelFont& font = *Screen::font;
     int x = col * font.glyph_width;
-    int y = row * font.glyph_height + dy;
+    int y = row * font.glyph_height + text_offset_y + dy;
 
     if (x % 8) app.fatal("Image x not a multiple of 8");
 
     const int image_width = image->width;
     const int image_height = image->height;
 
-    if (x < 0 || y < 0 || x + image_width > width || y + image_height > height) app.fatal("Image out of bounds");
+    if (x < 0 || y < 0 || x + image_width > width || y + image_height > height)
+        APP_FATAL << "Out of bounds. "
+        << "Coord: (" << x << "," << y << ")-(" << (x + image_width - 1) << "," << (y + image_height - 1) << ") "
+        << "Canvas: " << width << "x" << height;
 
     int byte_index = (x + y * width) / 8;
-    byte_index += text_offset_y * width / font.glyph_width;
 
     const unsigned char* image_pixels = image->pixels;
 
