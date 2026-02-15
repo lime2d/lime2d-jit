@@ -349,6 +349,9 @@ void LuaHost::registerGraphicsSubtable()
         {"cset", l_graphics_cset},
         {"con", l_graphics_con},
         {"coff", l_graphics_coff},
+        {"eset", l_graphics_eset},
+        {"eon", l_graphics_eon},
+        {"eoff", l_graphics_eoff},
 
         // Text
         {"locate", l_graphics_locate},
@@ -674,8 +677,8 @@ int LuaHost::l_graphics_rset(lua_State* L)
     int h = (int)luaL_checkinteger(L, 4);
     bool solid = lua_isnone(L, 5) ? true : (lua_toboolean(L, 5) != 0);
     bool on = lua_isnone(L, 6) ? true : (lua_toboolean(L, 6) != 0);
-    if (w < 1 || h < 1)
-        return luaL_error(L, "lime.graphics.rset: invalid size (%dx%d)", w, h);
+    if (w < 0) x -= (w = -w);
+    if (h < 0) y -= (h = -h);
     if (x < 0 || (x + w - 1) >= Screen::width || y < 0 || (y + h - 1) >= Screen::height)
         return luaL_error(L, "lime.graphics.rset: out of bounds (%d,%d)-(%d,%d)", x, y, x + w - 1, y + h - 1);
     requireScreen(L)->rset(x, y, w, h, solid, on);
@@ -689,8 +692,8 @@ int LuaHost::l_graphics_ron(lua_State* L)
     int w = (int)luaL_checkinteger(L, 3);
     int h = (int)luaL_checkinteger(L, 4);
     bool solid = lua_isnone(L, 5) ? true : (lua_toboolean(L, 5) != 0);
-    if (w < 1 || h < 1)
-        return luaL_error(L, "lime.graphics.ron: invalid size (%dx%d)", w, h);
+    if (w < 0) x -= (w = -w);
+    if (h < 0) y -= (h = -h);
     if (x < 0 || (x + w - 1) >= Screen::width || y < 0 || (y + h - 1) >= Screen::height)
         return luaL_error(L, "lime.graphics.ron: out of bounds (%d,%d)-(%d,%d)", x, y, x + w - 1, y + h - 1);
     requireScreen(L)->ron(x, y, w, h, solid);
@@ -704,8 +707,8 @@ int LuaHost::l_graphics_roff(lua_State* L)
     int w = (int)luaL_checkinteger(L, 3);
     int h = (int)luaL_checkinteger(L, 4);
     bool solid = lua_isnone(L, 5) ? true : (lua_toboolean(L, 5) != 0);
-    if (w < 1 || h < 1)
-        return luaL_error(L, "lime.graphics.roff: invalid size (%dx%d)", w, h);
+    if (w < 0) x -= (w = -w);
+    if (h < 0) y -= (h = -h);
     if (x < 0 || (x + w - 1) >= Screen::width || y < 0 || (y + h - 1) >= Screen::height)
         return luaL_error(L, "lime.graphics.roff: out of bounds (%d,%d)-(%d,%d)", x, y, x + w - 1, y + h - 1);
     requireScreen(L)->roff(x, y, w, h, solid);
@@ -719,8 +722,12 @@ int LuaHost::l_graphics_cset(lua_State* L)
     int size = (int)luaL_checkinteger(L, 3);
     bool solid = lua_isnone(L, 4) ? true : (lua_toboolean(L, 4) != 0);
     bool on = lua_isnone(L, 5) ? true : (lua_toboolean(L, 5) != 0);
-    if (size < 1)
-        return luaL_error(L, "lime.graphics.cset: invalid size (%dx%d)", size, size);
+    if (size < 0)
+    {
+        x += size;
+        y += size;
+        size = -size;
+    }
     if (x < 0 || (x + size - 1) >= Screen::width || y < 0 || (y + size - 1) >= Screen::height)
         return luaL_error(L, "lime.graphics.cset: out of bounds (%d,%d)-(%d,%d)", x, y, x + size - 1, y + size - 1);
     requireScreen(L)->cset(x, y, size, solid, on);
@@ -733,8 +740,12 @@ int LuaHost::l_graphics_con(lua_State* L)
     int y = (int)luaL_checkinteger(L, 2);
     int size = (int)luaL_checkinteger(L, 3);
     bool solid = lua_isnone(L, 4) ? true : (lua_toboolean(L, 4) != 0);
-    if (size < 1)
-        return luaL_error(L, "lime.graphics.con: invalid size (%dx%d)", size, size);
+    if (size < 0)
+    {
+        x += size;
+        y += size;
+        size = -size;
+    }
     if (x < 0 || (x + size - 1) >= Screen::width || y < 0 || (y + size - 1) >= Screen::height)
         return luaL_error(L, "lime.graphics.con: out of bounds (%d,%d)-(%d,%d)", x, y, x + size - 1, y + size - 1);
     requireScreen(L)->con(x, y, size, solid);
@@ -747,11 +758,61 @@ int LuaHost::l_graphics_coff(lua_State* L)
     int y = (int)luaL_checkinteger(L, 2);
     int size = (int)luaL_checkinteger(L, 3);
     bool solid = lua_isnone(L, 4) ? true : (lua_toboolean(L, 4) != 0);
-    if (size < 1)
-        return luaL_error(L, "lime.graphics.coff: invalid size (%dx%d)", size, size);
+    if (size < 0)
+    {
+        x += size;
+        y += size;
+        size = -size;
+    }
     if (x < 0 || (x + size - 1) >= Screen::width || y < 0 || (y + size - 1) >= Screen::height)
         return luaL_error(L, "lime.graphics.coff: out of bounds (%d,%d)-(%d,%d)", x, y, x + size - 1, y + size - 1);
     requireScreen(L)->coff(x, y, size, solid);
+    return 0;
+}
+
+int LuaHost::l_graphics_eset(lua_State* L)
+{
+    int x = (int)luaL_checkinteger(L, 1);
+    int y = (int)luaL_checkinteger(L, 2);
+    int w = (int)luaL_checkinteger(L, 3);
+    int h = (int)luaL_checkinteger(L, 4);
+    bool solid = lua_isnone(L, 5) ? true : (lua_toboolean(L, 5) != 0);
+    bool on = lua_isnone(L, 6) ? true : (lua_toboolean(L, 6) != 0);
+    if (w < 0) x -= (w = -w);
+    if (h < 0) y -= (h = -h);
+    if (x < 0 || (x + w - 1) >= Screen::width || y < 0 || (y + h - 1) >= Screen::height)
+        return luaL_error(L, "lime.graphics.eset: out of bounds (%d,%d)-(%d,%d)", x, y, x + w - 1, y + h - 1);
+    requireScreen(L)->eset(x, y, w, h, solid, on);
+    return 0;
+}
+
+int LuaHost::l_graphics_eon(lua_State* L)
+{
+    int x = (int)luaL_checkinteger(L, 1);
+    int y = (int)luaL_checkinteger(L, 2);
+    int w = (int)luaL_checkinteger(L, 3);
+    int h = (int)luaL_checkinteger(L, 4);
+    bool solid = lua_isnone(L, 5) ? true : (lua_toboolean(L, 5) != 0);
+    if (w < 0) x -= (w = -w);
+    if (h < 0) y -= (h = -h);
+    if (x < 0 || (x + w - 1) >= Screen::width || y < 0 || (y + h - 1) >= Screen::height)
+        return luaL_error(L, "lime.graphics.eon: out of bounds (%d,%d)-(%d,%d)", x, y, x + w - 1, y + h - 1);
+    requireScreen(L)->eon(x, y, w, h, solid);
+    return 0;
+}
+
+int LuaHost::l_graphics_eoff(lua_State* L)
+{
+    int x = (int)luaL_checkinteger(L, 1);
+    int y = (int)luaL_checkinteger(L, 2);
+    int w = (int)luaL_checkinteger(L, 3);
+    int h = (int)luaL_checkinteger(L, 4);
+    bool solid = lua_isnone(L, 5) ? true : (lua_toboolean(L, 5) != 0);
+    if (w < 0) x -= (w = -w);
+    if (h < 0) y -= (h = -h);
+    if (x < 0 || (x + w - 1) >= Screen::width || y < 0 || (y + h - 1) >= Screen::height)
+        return luaL_error(L, "lime.graphics.eoff: out of bounds (%d,%d)-(%d,%d)", x, y, x + w - 1, y + h - 1);
+    requireScreen(L)->eoff(x, y, w, h, solid);
     return 0;
 }
 

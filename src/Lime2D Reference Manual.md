@@ -266,6 +266,29 @@ Draws a circle with pixels on.
 
 Draws a circle with pixels off.
 
+### Ellipse Operations
+
+Ellipse coordinates specify the top-left corner of the bounding box, not the center.
+
+#### `lime.graphics.eset(x, y, w, h [, solid [, on]])`
+
+Draws an ellipse.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `x, y` | integer | — | Top-left of bounding box |
+| `w, h` | integer | — | Width and height |
+| `solid` | boolean | `true` | If `true`, filled; if `false`, edges only |
+| `on` | boolean | `true` | Pixel state |
+
+#### `lime.graphics.eon(x, y, w, h [, solid])`
+
+Draws an ellipse with pixels on.
+
+#### `lime.graphics.eoff(x, y, w, h [, solid])`
+
+Draws an ellipse with pixels off.
+
 ### Text Operations
 
 Text uses an 8×16 IBM VGA-style monospace font with 256 glyphs (code page 437 layout). Text-drawing functions are **opaque**. When a glyph is drawn, it completely overwrites all pixels within its 8×16 bounding box.

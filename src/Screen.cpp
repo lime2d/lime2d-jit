@@ -182,7 +182,8 @@ void Screen::rset(int x, int y, int w, int h, bool solid, bool on)
 
 void Screen::ron(int x, int y, int w, int h, bool solid)
 {
-    if (w <= 0 || h <= 0) return;
+    if (w < 0) x -= (w = -w);
+    if (h < 0) y -= (h = -h);
 
     if (!inBounds(x, y, x + w - 1, y + h - 1))
         APP_FATAL << "Out of bounds. "
@@ -213,7 +214,8 @@ void Screen::ron(int x, int y, int w, int h, bool solid)
 
 void Screen::roff(int x, int y, int w, int h, bool solid)
 {
-    if (w <= 0 || h <= 0) return;
+    if (w < 0) x -= (w = -w);
+    if (h < 0) y -= (h = -h);
 
     if (!inBounds(x, y, x + w - 1, y + h - 1))
         APP_FATAL << "Out of bounds. "
@@ -251,7 +253,12 @@ void Screen::cset(int x, int y, int size, bool solid, bool on)
 // Draw circle (x, y, and size define the logical square in which the circle sits)
 void Screen::con(int x, int y, int size, bool solid)
 {
-    if (size <= 0) return;
+    if (size < 0)
+    {
+        x += size;
+        y += size;
+        size = -size;
+    }
 
     // The (x,y) params specify the top-left of the circle's bounding box
     if (!inBounds(x, y, x + size - 1, y + size - 1))
@@ -318,7 +325,12 @@ void Screen::con(int x, int y, int size, bool solid)
 // Clear circle (x, y, and size define the logical square in which the circle sits)
 void Screen::coff(int x, int y, int size, bool solid)
 {
-    if (size <= 0) return;
+    if (size < 0)
+    {
+        x += size;
+        y += size;
+        size = -size;
+    }
 
     // The (x,y) params specify the top-left of the circle's bounding box
     if (!inBounds(x, y, x + size - 1, y + size - 1))
@@ -375,6 +387,178 @@ void Screen::coff(int x, int y, int size, bool solid)
                     float test_dx = test_px + point_5_minus_r;
 
                     if (test_dx * test_dx <= rsq_minus_test_dy_sq)
+                        break;
+                }
+            }
+        }
+    }
+}
+
+void Screen::eset(int x, int y, int w, int h, bool solid, bool on)
+{
+    if (on) eon(x, y, w, h, solid);
+    else eoff(x, y, w, h, solid);
+}
+
+// Draw an ellipse (x, y, w, and h define the logical rectangle in which the ellipse sits)
+void Screen::eon(int x, int y, int w, int h, bool solid)
+{
+    if (w < 0) x -= (w = -w);
+    if (h < 0) y -= (h = -h);
+
+    if (!inBounds(x, y, x + w - 1, y + h - 1))
+        APP_FATAL << "Out of bounds. "
+        << "Coord: (" << x << "," << y << ")-(" << (x + w - 1) << "," << (y + h - 1) << ") "
+        << "Canvas: " << width << "x" << height;
+
+    float a = w / 2.0f;
+    float b = h / 2.0f;
+
+    float a_sq = a * a;
+    float b_sq = b * b;
+
+    int half_w = (w + 1) / 2;
+    int half_h = (h + 1) / 2;
+
+    int w_minus_1 = w - 1;
+    int h_minus_1 = h - 1;
+
+    float x_offset = 0.5f - a;
+    float y_offset = 0.5f - b;
+
+    int start_x = 0;
+
+    for (int py = half_h - 1; py >= 0; py--)
+    {
+        float dy = py + y_offset;
+        float dy_sq_over_b_sq = (dy * dy) / b_sq;
+
+        float one_minus_dy_term = 1.0f - dy_sq_over_b_sq;
+
+        int y_top = y + py;
+        int y_bottom = y - py + h_minus_1;
+
+        for (int px = start_x; px < half_w; px++)
+        {
+            float dx = px + x_offset;
+            float dx_sq_over_a_sq = (dx * dx) / a_sq;
+
+            if (dx_sq_over_a_sq <= one_minus_dy_term)
+            {
+                start_x = px;
+
+                ponUnsafe(x + px, y_top);
+                ponUnsafe(x + px, y_bottom);
+                ponUnsafe(x - px + w_minus_1, y_top);
+                ponUnsafe(x - px + w_minus_1, y_bottom);
+
+                if (solid)
+                {
+                    while (++px < half_w)
+                    {
+                        ponUnsafe(x + px, y_top);
+                        ponUnsafe(x + px, y_bottom);
+                        ponUnsafe(x - px + w_minus_1, y_top);
+                        ponUnsafe(x - px + w_minus_1, y_bottom);
+                    }
+                    break;
+                }
+                else if (py)
+                {
+                    int test_py = py - 1;
+                    int test_px = px + 1;
+
+                    float test_dy = test_py + y_offset;
+                    float test_dy_sq_over_b_sq = (test_dy * test_dy) / b_sq;
+                    float test_one_minus = 1.0f - test_dy_sq_over_b_sq;
+
+                    float test_dx = test_px + x_offset;
+                    float test_dx_sq_over_a_sq = (test_dx * test_dx) / a_sq;
+
+                    if (test_dx_sq_over_a_sq <= test_one_minus)
+                        break;
+                }
+            }
+        }
+    }
+}
+
+// Clear an ellipse (x, y, w, and h define the logical rectangle in which the ellipse sits)
+void Screen::eoff(int x, int y, int w, int h, bool solid)
+{
+    if (w < 0) x -= (w = -w);
+    if (h < 0) y -= (h = -h);
+
+    if (!inBounds(x, y, x + w - 1, y + h - 1))
+        APP_FATAL << "Out of bounds. "
+        << "Coord: (" << x << "," << y << ")-(" << (x + w - 1) << "," << (y + h - 1) << ") "
+        << "Canvas: " << width << "x" << height;
+
+    float a = w / 2.0f;
+    float b = h / 2.0f;
+
+    float a_sq = a * a;
+    float b_sq = b * b;
+
+    int half_w = (w + 1) / 2;
+    int half_h = (h + 1) / 2;
+
+    int w_minus_1 = w - 1;
+    int h_minus_1 = h - 1;
+
+    float x_offset = 0.5f - a;
+    float y_offset = 0.5f - b;
+
+    int start_x = 0;
+
+    for (int py = half_h - 1; py >= 0; py--)
+    {
+        float dy = py + y_offset;
+        float dy_sq_over_b_sq = (dy * dy) / b_sq;
+
+        float one_minus_dy_term = 1.0f - dy_sq_over_b_sq;
+
+        int y_top = y + py;
+        int y_bottom = y - py + h_minus_1;
+
+        for (int px = start_x; px < half_w; px++)
+        {
+            float dx = px + x_offset;
+            float dx_sq_over_a_sq = (dx * dx) / a_sq;
+
+            if (dx_sq_over_a_sq <= one_minus_dy_term)
+            {
+                start_x = px;
+
+                poffUnsafe(x + px, y_top);
+                poffUnsafe(x + px, y_bottom);
+                poffUnsafe(x - px + w_minus_1, y_top);
+                poffUnsafe(x - px + w_minus_1, y_bottom);
+
+                if (solid)
+                {
+                    while (++px < half_w)
+                    {
+                        poffUnsafe(x + px, y_top);
+                        poffUnsafe(x + px, y_bottom);
+                        poffUnsafe(x - px + w_minus_1, y_top);
+                        poffUnsafe(x - px + w_minus_1, y_bottom);
+                    }
+                    break;
+                }
+                else if (py)
+                {
+                    int test_py = py - 1;
+                    int test_px = px + 1;
+
+                    float test_dy = test_py + y_offset;
+                    float test_dy_sq_over_b_sq = (test_dy * test_dy) / b_sq;
+                    float test_one_minus = 1.0f - test_dy_sq_over_b_sq;
+
+                    float test_dx = test_px + x_offset;
+                    float test_dx_sq_over_a_sq = (test_dx * test_dx) / a_sq;
+
+                    if (test_dx_sq_over_a_sq <= test_one_minus)
                         break;
                 }
             }

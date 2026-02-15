@@ -126,6 +126,9 @@ private:
     static int l_graphics_cset(lua_State* L);   // Circle on/off | params: (x,y,size[,solid=true[,on=true]]) - x,y is top-left of circle's bounding box
     static int l_graphics_con(lua_State* L);    // Circle on | params: (x,y,size[,solid=true])
     static int l_graphics_coff(lua_State* L);   // Circle off | params: (x,y,size[,solid=true])
+    static int l_graphics_eset(lua_State* L);   // Ellipse on/off | params: (x,y,w,h[,solid=true[,on=true]]) - x,y is top-left of ellipse's bounding box
+    static int l_graphics_eon(lua_State* L);    // Ellipse on | params: (x,y,w,h[,solid=true])
+    static int l_graphics_eoff(lua_State* L);   // Ellipse off | params: (x,y,w,h[,solid=true])
 
     // Text
     static int l_graphics_locate(lua_State* L); // Set next print location | params: (row,col) - 0,0 is origin (top-left-most)

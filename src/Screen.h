@@ -60,6 +60,9 @@ public:
     void cset(int x, int y, int size, bool solid = true, bool on = true); // Circle on/off
     void con(int x, int y, int size, bool solid = true); // Circle on
     void coff(int x, int y, int size, bool solid = true); // Circle off
+    void eset(int x, int y, int w, int h, bool solid = true, bool on = true); // Ellipse on/off
+    void eon(int x, int y, int w, int h, bool solid = true); // Ellipse on
+    void eoff(int x, int y, int w, int h, bool solid = true); // Ellipse off
 
     /* Glyph drawing */
     void locate(int row, int col); // Set position of cursor (top-left is [0,0])
