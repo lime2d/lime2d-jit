@@ -21,7 +21,7 @@ Both variants expose an identical Lua scripting API. Choose LuaJIT for faster sc
 
 If you just want to create Lime2D applications without building from source, grab the latest release package:
 
-**[⬇ Download Lime2D v5.1.4.1 (Win64)](https://github.com/lime2d/lime2d-jit/releases/tag/v5.1.4.1)**
+**[⬇ Download Lime2D v5.1.4.2 (Win64)](https://github.com/lime2d/lime2d-jit/releases/tag/v5.1.4.2)**
 
 The release package contains the ready-to-use EXE, example scripts (Hello World, Pong, Snake, and an image demo), and full documentation. To run an example, drag any `.lua` file onto `lime2d-jit.exe` or isolate them together in the same folder.
 

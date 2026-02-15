@@ -9,7 +9,7 @@ void logError(const std::string& msg);
 
 const std::string& Lime2DVersion();
 
-#define LIME2D_RELEASE_NUMBER 1
+#define LIME2D_RELEASE_NUMBER 2
 #define LIME2D_VERSION Lime2DVersion()
 
 class App
